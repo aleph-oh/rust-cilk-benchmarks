@@ -1,0 +1,12 @@
+*.o
+sum
+perf.*
+bench
+bench_serial
+bench_single
+fib
+bench_single.md
+bench_single_parallelism.md
+test
+.vscode/
+.venv/

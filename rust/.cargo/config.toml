@@ -1,0 +1,2 @@
+[build]
+rustflags = ["-Zpanic_abort_tests", "-Cpanic=abort", "-Ctarget-cpu=native"]

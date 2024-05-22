@@ -1,0 +1,40 @@
+[package]
+name = "parallel_prefix_sum"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "pps_lib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "cilk-pps"
+path = "src/bin/cilk.rs"
+
+[[bin]]
+name = "rayon-pps"
+path = "src/bin/rayon.rs"
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "parallel_prefix_sum"
+harness = false
+
+[[bench]]
+name = "fib"
+harness = false
+
+[dependencies]
+crossbeam-utils = "0.8.16"
+rayon = "1.8.0"
+
+[profile.release]
+lto = true
+panic = "abort"
+codegen-units=1
+
+[profile.dev]
+panic = "abort"
