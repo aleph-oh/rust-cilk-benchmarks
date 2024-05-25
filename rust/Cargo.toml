@@ -10,11 +10,15 @@ path = "src/lib.rs"
 
 [[bin]]
 name = "cilk-pps"
-path = "src/bin/cilk.rs"
+path = "src/bin/cilk_pps.rs"
 
 [[bin]]
 name = "rayon-pps"
-path = "src/bin/rayon.rs"
+path = "src/bin/rayon_pps.rs"
+
+[[bin]]
+name = "fib"
+path = "src/bin/fib.rs"
 
 [dev-dependencies]
 criterion = "0.3"
@@ -28,6 +32,7 @@ name = "fib"
 harness = false
 
 [dependencies]
+clap = { version = "4.5.4", features = ["derive"] }
 crossbeam-utils = "0.8.16"
 rayon = "1.8.0"
 
