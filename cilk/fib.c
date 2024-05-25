@@ -16,11 +16,8 @@ static size_t bench(int n, int num_runs, size_t (*fib)(int))
     {
         cilk_scope
         {
-            for (int t = 0; t < num_runs; t++)
-            {
-                size_t x = fib(n);
-                total += x;
-            }
+            size_t x = fib(n);
+            total += x;
         }
     }
 
