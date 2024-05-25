@@ -2,13 +2,15 @@
 #include <cilk/cilk.h>
 #include <stddef.h>
 
+int const SERIAL_CUTOFF = 10;
+
 size_t fib_scope(int n)
 {
     if (n <= 1)
     {
         return n;
     }
-    else if (n <= 10)
+    else if (n <= SERIAL_CUTOFF)
     {
         return fib_scope(n - 1) + fib_scope(n - 2);
     }
@@ -31,7 +33,7 @@ size_t fib_noscope(int n)
     {
         return n;
     }
-    else if (n <= 10)
+    else if (n <= SERIAL_CUTOFF)
     {
         return fib_noscope(n - 1) + fib_noscope(n - 2);
     }
