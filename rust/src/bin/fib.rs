@@ -19,17 +19,21 @@ struct Cli {
     which: WhichFib
 }
 
-fn main() {
-    let cli: Cli = Cli::parse();
-    let num_runs = cli.num_runs;
+fn run(num_runs: u32, n: u8, which: WhichFib) -> usize {
     let mut sum: usize = 0;
-    let fib: fn(usize) -> usize = match cli.which {
+    let fib: fn(usize) -> usize = match which {
         WhichFib::Cilk => bench_lib::fib::cilk_fib,
         WhichFib::Rayon => bench_lib::fib::rayon_fib,
     };
-    let n = cli.n as usize;
+    let n = n as usize;
     for _ in 0..num_runs {
         sum += fib(n);
     }
+    sum
+}
+
+fn main() {
+    let cli: Cli = Cli::parse();
+    let sum = run(cli.num_runs, cli.n, cli.which);
     println!("Fibonacci sum: {}", sum);
 }
