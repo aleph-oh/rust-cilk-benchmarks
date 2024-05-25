@@ -36,12 +36,16 @@ ifneq ($(CILKSAN), 0)
 	CFLAGS += -fsanitize=cilk
 endif
 
-DEPS = prefix_sum.h bench_lib.h
-OBJS = prefix_sum.o bench_lib.o
-CS_OBJS = prefix_sum_cs.o bench_lib_cs.o
-CS_BENCH_OBJS = prefix_sum_cs_bench.o bench_lib_cs_bench.o
+DEPS = prefix_sum.h pps_bench_lib.h fib_lib.h
+OBJS = prefix_sum.o pps_bench_lib.o fib_lib.o
+CS_OBJS = prefix_sum_cs.o pps_bench_lib_cs.o fib_lib_cs.o
+CS_BENCH_OBJS = prefix_sum_cs_bench.o pps_bench_lib_cs_bench.o fib_lib_cs_bench.o
 
-all: bench bench_serial bench_single test fib
+all: all_pps all_fib
+
+all_pps: pps_bench pps_bench_serial pps_bench_single pps_test
+
+all_fib: fib_bench
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -52,34 +56,40 @@ all: bench bench_serial bench_single test fib
 %_cs_bench.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) -fcilktool=cilkscale-benchmark 
 
-bench: $(OBJS) bench.o
+pps_bench: $(OBJS) pps_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
-bench_serial: $(OBJS) bench_serial.o
+pps_bench_serial: $(OBJS) pps_bench_serial.o
 	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
-bench_single: $(OBJS) bench_single.o
+pps_bench_single: $(OBJS) pps_bench_single.o
 	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
-test: $(OBJS) test.o
+pps_test: $(OBJS) pps_test.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
-bench_cs: $(CS_OBJS) bench_cs.o
+pps_bench_cs: $(CS_OBJS) pps_bench_cs.o
 	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale $(LDFLAGS)
 
-bench_cs_bench: $(CS_BENCH_OBJS) bench_cs_bench.o
+pps_bench_cs_bench: $(CS_BENCH_OBJS) pps_bench_cs_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale-benchmark $(LDFLAGS)
 
-fib: fib.c
-	$(CC) -o fib fib.c $(CFLAGS) $(LDFLAGS)
+fib_bench: $(OBJS) fib_bench.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
-.PHONY: clean scale
+fib_bench_cs: $(CS_OBJS) fib_bench.o
+	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale $(LDFLAGS)
+
+fib_bench_cs_bench: $(CS_BENCH_OBJS) fib_bench.o
+	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale-benchmark $(LDFLAGS)
+
+.PHONY: all_fib all_pps clean scale pps_scale fib_scale
 
 clean:
-	rm -f *.o bench test bench_cs_bench bench_cs bench_serial bench_single fib
+	rm -f *.o pps_bench pps_test pps_bench_cs_bench pps_bench_cs pps_bench_serial pps_bench_single fib_bench fib_bench_cs fib_bench_cs_bench
 
-# TODO: make sure you can generate visible plots.
-# There's some issue where it can't open the csv
-# of the outputs to make a plot, but I'm not sure
-# why this happens.
-scale: bench_cs bench_cs_bench
+scale: pps_scale fib_scale
+
+pps_scale: pps_bench_cs pps_bench_cs_bench
+
+fib_scale: fib_bench_cs fib_bench_cs_bench

@@ -4,47 +4,7 @@
 #include <stdio.h>
 #include <time.h>
 
-static inline size_t fib_scope(int n)
-{
-    if (n <= 1)
-    {
-        return n;
-    }
-    else if (n <= 10)
-    {
-        return fib_scope(n - 1) + fib_scope(n - 2);
-    }
-    else
-    {
-        size_t x;
-        size_t y;
-        cilk_scope
-        {
-            x = cilk_spawn fib_scope(n - 1);
-            y = fib_scope(n - 2);
-        }
-        return x + y;
-    }
-}
-
-static inline size_t fib(int n)
-{
-    if (n <= 1)
-    {
-        return n;
-    }
-    else if (n <= 10)
-    {
-        return fib(n - 1) + fib(n - 2);
-    }
-    else
-    {
-        size_t const x = cilk_spawn fib(n - 1);
-        size_t const y = fib(n - 2);
-        cilk_sync;
-        return x + y;
-    }
-}
+#include "fib_lib.h"
 
 static int64_t time_ns(struct timespec t)
 {
@@ -53,7 +13,7 @@ static int64_t time_ns(struct timespec t)
 
 typedef size_t (*fib_t)(int);
 
-void bench(int const num_runs, fib_t fib)
+static void bench(int const num_runs, fib_t fib)
 {
     int const n[] = {15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 30, 35, 40};
     size_t total = 0;
@@ -81,7 +41,7 @@ void bench(int const num_runs, fib_t fib)
 int main()
 {
     printf("benchmarking fib without cilk_scope\n");
-    bench(100, fib);
+    bench(100, fib_noscope);
     printf("benchmarking fib with cilk_scope\n");
     bench(100, fib_scope);
 }

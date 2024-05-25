@@ -1,6 +1,5 @@
+#include "pps_bench_lib.h"
 #include "prefix_sum.h"
-#include "bench_lib.h"
-
 
 int main() {
   int const num_runs = 50;

@@ -1,4 +1,4 @@
-#include "bench_lib.h"
+#include "pps_bench_lib.h"
 #include "prefix_sum.h"
 
 int main()
