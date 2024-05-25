@@ -10,6 +10,7 @@ CILK_LD=path/to/your/linker
 **Running Benchmarks**
 There are a few benchmarks in this directory:
 - `benchmark.sh` runs the below benchmarking binaries with `hyperfine` to get more statistically useful results and is analagous to the similarly-named file in the sibling `rust` directory.
+- `fib` runs fib(n) on the user-specified input for a specified number of runs, optionally using cilk_scope rather than cilk_sync.
 - `fib_bench` runs fib(n) for a few interesting values of n to benchmark work-heavy tasks.
 - `pps_bench` runs a parallel prefix sum over a varying number of elements many times to smooth out variation in runtime.
 - `pps_bench_single` runs a parallel prefix sum over 1M elements a few times.
