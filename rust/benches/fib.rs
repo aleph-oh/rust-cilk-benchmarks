@@ -1,32 +1,5 @@
-#![feature(cilk)]
-
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, PlotConfiguration};
-
-const SERIAL_CUTOFF: usize = 10;
-
-fn cilk_fib(n: usize) -> usize {
-    match n {
-        0 | 1 => n,
-        2..=SERIAL_CUTOFF => cilk_fib(n - 1) + cilk_fib(n - 2),
-        _ => {
-            let x = cilk_spawn { cilk_fib(n - 1) };
-            let y = cilk_fib(n - 2);
-            cilk_sync;
-            x + y
-        }
-    }
-}
-
-fn rayon_fib(n: usize) -> usize {
-    match n {
-        0 | 1 => n,
-        2..=SERIAL_CUTOFF => rayon_fib(n - 1) + rayon_fib(n - 2),
-        _ => {
-            let (x, y) = rayon::join(|| rayon_fib(n - 1), || rayon_fib(n - 2));
-            x + y
-        }
-    }
-}
+use bench_lib::fib::{cilk_fib, rayon_fib};
 
 fn bench_fibs(c: &mut Criterion) {
     // Use a log scale because the asmyptomotic complexity is exponential.
