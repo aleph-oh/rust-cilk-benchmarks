@@ -1,4 +1,11 @@
-CC=xcrun /Users/jay/Code/MEng/opencilk/build/bin/clang
+CILK_CC_ENV=$(CILK_CC)
+OS := $(shell uname)
+ifeq ($(OS),Darwin)
+	CC=xcrun $(CIlK_CC_ENV)
+else
+	CC=$(CILK_CC_ENV)
+	LDFLAGS=-fuse-ld=lld
+endif
 
 CFLAGS = -fopencilk -g
 
@@ -30,31 +37,31 @@ all: bench bench_serial bench_single test
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 %_cs.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) -fcilktool=cilkscale
+	$(CC) -c -o $@ $< $(CFLAGS) -fcilktool=cilkscale 
 
 %_cs_bench.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) -fcilktool=cilkscale-benchmark
+	$(CC) -c -o $@ $< $(CFLAGS) -fcilktool=cilkscale-benchmark 
 
 bench: $(OBJS) bench.o
-	$(CC) -o $@ $^ $(CFLAGS) -flto
+	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
 bench_serial: $(OBJS) bench_serial.o
-	$(CC) -o $@ $^ $(CFLAGS) -flto
+	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
 bench_single: $(OBJS) bench_single.o
-	$(CC) -o $@ $^ $(CFLAGS) -flto
+	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
 test: $(OBJS) test.o
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
 bench_cs: $(CS_OBJS) bench_cs.o
-	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale
+	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale $(LDFLAGS)
 
 bench_cs_bench: $(CS_BENCH_OBJS) bench_cs_bench.o
-	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale-benchmark
+	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale-benchmark $(LDFLAGS)
 
 fib: fib.c
-	$(CC) -o fib fib.c $(CFLAGS)
+	$(CC) -o fib fib.c $(CFLAGS) $(LDFLAGS)
 
 .PHONY: clean scale
 
