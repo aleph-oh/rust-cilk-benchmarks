@@ -36,10 +36,17 @@ ifneq ($(CILKSAN), 0)
 	CFLAGS += -fsanitize=cilk
 endif
 
-DEPS = prefix_sum.h pps_bench_lib.h fib_lib.h
-OBJS = prefix_sum.o pps_bench_lib.o fib_lib.o
-CS_OBJS = prefix_sum_cs.o pps_bench_lib_cs.o fib_lib_cs.o
-CS_BENCH_OBJS = prefix_sum_cs_bench.o pps_bench_lib_cs_bench.o fib_lib_cs_bench.o
+PPS_DEPS = prefix_sum.h pps_bench_lib.h
+PPS_OBJS = prefix_sum.o pps_bench_lib.o
+PPS_CS_OBJS = prefix_sum_cs.o pps_bench_lib_cs.o
+PPS_CS_BENCH_OBJS = prefix_sum_cs_bench.o pps_bench_lib_cs_bench.o
+
+FIB_DEPS = fib_lib.h
+FIB_OBJS = fib_lib.o
+FIB_CS_OBJS = fib_lib_cs.o
+FIB_CS_BENCH_OBJS = fib_lib_cs_bench.o
+
+DEPS = $(PPS_DEPS) $(FIB_DEPS)
 
 all: all_pps all_fib
 
@@ -56,34 +63,34 @@ all_fib: fib_bench fib
 %_cs_bench.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) -fcilktool=cilkscale-benchmark 
 
-pps_bench: $(OBJS) pps_bench.o
+pps_bench: $(PPS_OBJS) pps_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
-pps_bench_serial: $(OBJS) pps_bench_serial.o
+pps_bench_serial: $(PPS_OBJS) pps_bench_serial.o
 	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
-pps_bench_single: $(OBJS) pps_bench_single.o
+pps_bench_single: $(PPS_OBJS) pps_bench_single.o
 	$(CC) -o $@ $^ $(CFLAGS) -flto $(LDFLAGS)
 
-pps_test: $(OBJS) pps_test.o
+pps_test: $(PPS_OBJS) pps_test.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
-pps_bench_cs: $(CS_OBJS) pps_bench_cs.o
+pps_bench_cs: $(PPS_CS_OBJS) pps_bench_cs.o
 	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale $(LDFLAGS)
 
-pps_bench_cs_bench: $(CS_BENCH_OBJS) pps_bench_cs_bench.o
+pps_bench_cs_bench: $(PPS_CS_BENCH_OBJS) pps_bench_cs_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale-benchmark $(LDFLAGS)
 
-fib: $(OBJS) fib.o
+fib: $(FIB_OBJS) fib.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
-fib_bench: $(OBJS) fib_bench.o
+fib_bench: $(FIB_OBJS) fib_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
-fib_bench_cs: $(CS_OBJS) fib_bench.o
+fib_bench_cs: $(FIB_CS_OBJS) fib_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale $(LDFLAGS)
 
-fib_bench_cs_bench: $(CS_BENCH_OBJS) fib_bench.o
+fib_bench_cs_bench: $(FIB_CS_BENCH_OBJS) fib_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale-benchmark $(LDFLAGS)
 
 .PHONY: all_fib all_pps clean scale pps_scale fib_scale
