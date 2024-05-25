@@ -1,5 +1,4 @@
-use pps_lib::common::ParallelScan;
-use pps_lib::cilk::CilkJoiner;
+use bench_lib::pps::prelude::*;
 
 fn main() {
     // Does a few runs of the Cilk benchmark to determine parallel scalability.

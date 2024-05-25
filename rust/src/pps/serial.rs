@@ -1,9 +1,8 @@
-use crate::common::Joiner;
-pub struct RayonJoiner;
-
-impl Joiner for RayonJoiner {
+use super::common::Joiner;
+pub struct SerialJoiner;
+impl Joiner for SerialJoiner {
     #[inline]
     fn join<A: Send, B: Send>(f: impl FnOnce() -> A + Send, g: impl FnOnce() -> B + Send) -> (A, B) {
-        rayon::join(f, g)
+        (f(), g())
     }
 }

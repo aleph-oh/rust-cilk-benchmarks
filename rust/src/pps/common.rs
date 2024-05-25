@@ -184,9 +184,9 @@ impl<J: Joiner, const UPSWEEP: usize, const DOWNSWEEP: usize, const ROTATE: usiz
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::cilk::CilkJoiner; 
-    use crate::rayon::RayonJoiner;
-    use crate::serial::SerialJoiner;
+    use crate::pps::cilk::CilkJoiner; 
+    use crate::pps::rayon::RayonJoiner;
+    use crate::pps::serial::SerialJoiner;
 
     #[test]
     fn test_rev_cilk() {

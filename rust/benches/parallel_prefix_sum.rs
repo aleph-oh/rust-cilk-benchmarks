@@ -4,11 +4,7 @@ use criterion::{
     Throughput,
 };
 
-use pps_lib::serial::SerialJoiner;
-
-use pps_lib::common::ParallelScan;
-use pps_lib::cilk::CilkJoiner;
-use pps_lib::rayon::RayonJoiner;
+use bench_lib::pps::prelude::*;
 
 fn bench_with<F>(b: &mut Bencher, f: F)
 where

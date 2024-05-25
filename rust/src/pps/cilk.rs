@@ -1,4 +1,4 @@
-use crate::common::Joiner;
+use super::common::Joiner;
 
 pub struct CilkJoiner;
 

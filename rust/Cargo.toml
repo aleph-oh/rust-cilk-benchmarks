@@ -5,7 +5,7 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-name = "pps_lib"
+name = "bench_lib"
 path = "src/lib.rs"
 
 [[bin]]

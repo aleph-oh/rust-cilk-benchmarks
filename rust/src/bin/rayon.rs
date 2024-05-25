@@ -1,5 +1,4 @@
-use pps_lib::common::ParallelScan;
-use pps_lib::rayon::RayonJoiner;
+use bench_lib::pps::prelude::*;
 
 fn main() {
     // Does a few runs of the Rayon benchmark to determine parallel scalability.
