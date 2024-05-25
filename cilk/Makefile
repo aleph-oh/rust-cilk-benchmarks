@@ -36,7 +36,7 @@ OBJS = prefix_sum.o bench_lib.o
 CS_OBJS = prefix_sum_cs.o bench_lib_cs.o
 CS_BENCH_OBJS = prefix_sum_cs_bench.o bench_lib_cs_bench.o
 
-all: bench bench_serial bench_single test
+all: bench bench_serial bench_single test fib
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
