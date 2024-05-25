@@ -45,7 +45,7 @@ all: all_pps all_fib
 
 all_pps: pps_bench pps_bench_serial pps_bench_single pps_test
 
-all_fib: fib_bench
+all_fib: fib_bench fib
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -74,6 +74,9 @@ pps_bench_cs: $(CS_OBJS) pps_bench_cs.o
 pps_bench_cs_bench: $(CS_BENCH_OBJS) pps_bench_cs_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) -fcilktool=cilkscale-benchmark $(LDFLAGS)
 
+fib: $(OBJS) fib.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
+
 fib_bench: $(OBJS) fib_bench.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
 
@@ -86,7 +89,7 @@ fib_bench_cs_bench: $(CS_BENCH_OBJS) fib_bench.o
 .PHONY: all_fib all_pps clean scale pps_scale fib_scale
 
 clean:
-	rm -f *.o pps_bench pps_test pps_bench_cs_bench pps_bench_cs pps_bench_serial pps_bench_single fib_bench fib_bench_cs fib_bench_cs_bench
+	rm -f *.o pps_bench pps_test pps_bench_cs_bench pps_bench_cs pps_bench_serial pps_bench_single fib_bench fib_bench_cs fib_bench_cs_bench fib
 
 scale: pps_scale fib_scale
 
