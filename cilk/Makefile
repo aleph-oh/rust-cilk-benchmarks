@@ -1,9 +1,14 @@
-CILK_CC_ENV=$(CILK_CC)
+include .env
+
+ifndef CILK_CC
+    $(error Please set CILK_CC to use this benchmark suite!)
+endif
+
 OS := $(shell uname)
 ifeq ($(OS),Darwin)
-	CC=xcrun $(CIlK_CC_ENV)
+	CC := xcrun $(CILK_CC)
 else
-	CC=$(CILK_CC_ENV)
+	CC := $(CILK_CC)
 	LDFLAGS=-fuse-ld=lld
 endif
 

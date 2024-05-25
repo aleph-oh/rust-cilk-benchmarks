@@ -10,3 +10,4 @@ bench_single_parallelism.md
 test
 .vscode/
 .venv/
+.env
