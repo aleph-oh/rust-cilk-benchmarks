@@ -9,10 +9,10 @@ On Linux, you may also need to install `lld`. To do this, follow either the inst
 
 **Running Benchmarks**
 There are a few benchmarks in this directory:
-- `bench` runs a parallel prefix sum over a varying number of elements many times to smooth out variation in runtime.
-- `bench_single` runs a parallel prefix sum over 1M elements a few times.
-- `bench_serial` runs a serial prefix sum over 1M elements a few times.
-- `fib` runs fib(n) for a few interesting values of n to benchmark work-heavy tasks.
+- `pps_bench` runs a parallel prefix sum over a varying number of elements many times to smooth out variation in runtime.
+- `pps_bench_single` runs a parallel prefix sum over 1M elements a few times.
+- `pps_bench_serial` runs a serial prefix sum over 1M elements a few times.
+- `fib_bench` runs fib(n) for a few interesting values of n to benchmark work-heavy tasks.
 - `benchmark.sh` runs the binaries with `hyperfine` to get more statistically useful results and is analagous to the similarly-named file in the sibling `rust` directory.
-- `test` runs a simple test suite for parallel prefix sum.
+- `pps_test` runs a simple test suite for parallel prefix sum.
 

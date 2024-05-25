@@ -4,8 +4,8 @@ pps_bench
 pps_bench_serial
 pps_bench_single
 fib_bench
-bench_single.md
-bench_single_parallelism.md
+pps_bench_single.md
+pps_bench_single_parallelism.md
 pps_test
 .vscode/
 .venv/
