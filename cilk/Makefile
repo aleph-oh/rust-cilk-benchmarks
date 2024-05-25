@@ -1,7 +1,12 @@
+# Feel free to define relevant environment variables in .env.
 include .env
 
 ifndef CILK_CC
     $(error Please set CILK_CC to use this benchmark suite!)
+endif
+
+ifndef CILK_LD
+    $(error Please set CILK_LD to use this benchmark suite!)
 endif
 
 OS := $(shell uname)
@@ -9,10 +14,10 @@ ifeq ($(OS),Darwin)
 	CC := xcrun $(CILK_CC)
 else
 	CC := $(CILK_CC)
-	LDFLAGS=-fuse-ld=lld
 endif
 
 CFLAGS = -fopencilk -g
+LDFLAGS=--ld-path=$(CILK_LD)
 
 DEBUG ?= 0
 ifneq ($(DEBUG), 0)
