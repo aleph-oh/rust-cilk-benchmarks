@@ -1,13 +1,15 @@
 This directory contains microbenchmarks for Cilk programs to compare them against Rust + Cilk implementations in the `rust` directory contained in the same parent.
 
 **Setup**
-Add a file .env that sets two variables CILK\_CC and CILK\_LD. It should look something like the following:
+
+Add a file .env that sets two variables `CILK_CC` and `CILK_LD`. It should look something like the following:
 ```
 CILK_CC=path/to/your/opencilk/compiler
 CILK_LD=path/to/your/linker
 ```
 
 **Running Benchmarks**
+
 There are a few benchmarks in this directory:
 - `benchmark.sh` runs the below benchmarking binaries with `hyperfine` to get more statistically useful results and is analagous to the similarly-named file in the sibling `rust` directory.
 - `fib` runs fib(n) on the user-specified input for a specified number of runs, optionally using cilk_scope rather than cilk_sync.
