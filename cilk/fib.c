@@ -4,9 +4,15 @@
 #include <string.h>
 #include "fib_lib.h"
 
+#define STRCAP(S) (sizeof(S) - 1)
+#define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
+
+char const SCOPE[] = "scope";
+char const NOSCOPE[] = "noscope";
+
 static void usage(const char *const binary_name)
 {
-    printf("Usage: %s <n> <num_runs> <scope|noscope>\n", binary_name);
+    printf("Usage: %s <n> <num_runs> <%s|%s>\n", binary_name, SCOPE, NOSCOPE);
 }
 
 static size_t bench(int n, int num_runs, size_t (*fib)(int))
@@ -40,28 +46,29 @@ int main(int argc, char **argv)
     int num_runs = atoi(argv[2]);
 
     // Parsing the third argument is a bit more complicated. We expect it to
-    // be either "scope" or "noscope". This means we need a size-8 buffer
-    // to store the argument.
-    int const use_cilk_scope_len = strlen(argv[3]);
-    if (use_cilk_scope_len > 7)
+    // be either SCOPE or NOSCOPE, and we compute at compile-time the
+    // expected length of the longest string.
+
+    char use_cilk_scope[MAX(sizeof(SCOPE), sizeof(NOSCOPE))];
+
+    if (strlen(argv[3]) > STRCAP(use_cilk_scope))
     {
         usage(argv[0]);
         return 1;
     }
-    char use_cilk_scope[8];
     strncpy(use_cilk_scope, argv[3], sizeof use_cilk_scope);
-    if (use_cilk_scope[7] != '\0')
-    {
-        usage(argv[0]);
-        return 1;
-    }
+    // Because of the above check, we now know that the buffer must be null-terminated,
+    // since what we copied into it was at most as long as the buffer and strncpy
+    // pads with null.
 
     size_t result;
-    if (memcmp(use_cilk_scope, "scope", 5) == 0)
+    // Last, let's make sure that the argument is either SCOPE or NOSCOPE.
+    // Based on whichever one it is, we call the appropriate function.
+    if (memcmp(use_cilk_scope, SCOPE, STRCAP(SCOPE)) == 0)
     {
         result = bench(n, num_runs, fib_scope);
     }
-    else if (memcmp(use_cilk_scope, "noscope", 7) == 0)
+    else if (memcmp(use_cilk_scope, NOSCOPE, STRCAP(NOSCOPE)) == 0)
     {
         result = bench(n, num_runs, fib_noscope);
     }
