@@ -15,7 +15,7 @@ static void usage(const char *const binary_name)
     printf("Usage: %s <n> <num_runs> <%s|%s>\n", binary_name, SCOPE, NOSCOPE);
 }
 
-static size_t bench(int n, int num_runs, size_t (*fib)(int))
+static size_t run(int n, int num_runs, size_t (*fib)(int))
 {
     size_t total = 0;
     for (int i = 0; i < num_runs; i++)
@@ -66,11 +66,11 @@ int main(int argc, char **argv)
     // Based on whichever one it is, we call the appropriate function.
     if (memcmp(use_cilk_scope, SCOPE, STRCAP(SCOPE)) == 0)
     {
-        result = bench(n, num_runs, fib_scope);
+        result = run(n, num_runs, fib_scope);
     }
     else if (memcmp(use_cilk_scope, NOSCOPE, STRCAP(NOSCOPE)) == 0)
     {
-        result = bench(n, num_runs, fib_noscope);
+        result = run(n, num_runs, fib_noscope);
     }
     else
     {
