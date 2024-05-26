@@ -16,7 +16,7 @@ else
 	CC := $(CILK_CC)
 endif
 
-CFLAGS = -fopencilk -g
+CFLAGS = -fopencilk -gdwarf-4
 LDFLAGS=--ld-path=$(CILK_LD)
 
 DEBUG ?= 0
