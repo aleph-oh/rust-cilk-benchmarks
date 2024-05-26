@@ -56,7 +56,7 @@ int main(int argc, char **argv)
         usage(argv[0]);
         return 1;
     }
-    strncpy(use_cilk_scope, argv[3], sizeof use_cilk_scope);
+    strncpy(use_cilk_scope, argv[3], sizeof(use_cilk_scope));
     // Because of the above check, we now know that the buffer must be null-terminated,
     // since what we copied into it was at most as long as the buffer and strncpy
     // pads with null.
