@@ -62,15 +62,20 @@ int main(int argc, char **argv)
     // pads with null.
 
     size_t result;
+    // Macro that deduplicates the usage of the 2nd parameter to memcmp.
+    // We can't use a function because passing an array into a function
+    // always decays into a pointer.
+#define MEMCMP_USE_CILK_SCOPE(MAYBE_SCOPE) memcmp(use_cilk_scope, (MAYBE_SCOPE), STRCAP((MAYBE_SCOPE)))
+
     // Last, let's make sure that the argument is either SCOPE or NOSCOPE.
     // Based on whichever one it is, we call the appropriate function.
-    if (memcmp(use_cilk_scope, SCOPE, STRCAP(SCOPE)) == 0)
-    {
-        result = run(n, num_runs, fib_scope);
-    }
-    else if (memcmp(use_cilk_scope, NOSCOPE, STRCAP(NOSCOPE)) == 0)
+    if (MEMCMP_USE_CILK_SCOPE(NOSCOPE) == 0)
     {
         result = run(n, num_runs, fib_noscope);
+    }
+    else if (MEMCMP_USE_CILK_SCOPE(SCOPE) == 0)
+    {
+        result = run(n, num_runs, fib_scope);
     }
     else
     {
