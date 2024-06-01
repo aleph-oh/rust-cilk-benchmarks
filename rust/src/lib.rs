@@ -17,6 +17,19 @@ pub mod fib {
         }
     }
 
+    pub fn cilk_scope_fib(n: usize) -> usize {
+        match n {
+            0 | 1 => n,
+            2..=SERIAL_CUTOFF => cilk_scope_fib(n - 1) + cilk_scope_fib(n - 2),
+            _ => cilk_scope {
+                    let x = cilk_spawn { cilk_scope_fib(n - 1) };
+                    let y = cilk_scope_fib(n - 2);
+                    cilk_sync;
+                    x + y
+                }
+        }
+    }
+
     pub fn rayon_fib(n: usize) -> usize {
         match n {
             0 | 1 => n,
