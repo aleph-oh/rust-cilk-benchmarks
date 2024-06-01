@@ -6,6 +6,8 @@ enum WhichFib {
     Cilk,
     /// Use Rayon for the Fibonacci computation.
     Rayon,
+    /// Use Cilk with cilk_scope for the Fibonacci computation.
+    CilkWithScope,
 }
 
 #[derive(Parser)]
@@ -24,6 +26,7 @@ fn run(num_runs: u32, n: u8, which: WhichFib) -> usize {
     let fib: fn(usize) -> usize = match which {
         WhichFib::Cilk => bench_lib::fib::cilk_fib,
         WhichFib::Rayon => bench_lib::fib::rayon_fib,
+        WhichFib::CilkWithScope => bench_lib::fib::cilk_scope_fib,
     };
     let n = n as usize;
     for _ in 0..num_runs {
