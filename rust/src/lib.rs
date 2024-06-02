@@ -40,4 +40,19 @@ pub mod fib {
             }
         }
     }
+
+    pub fn rayon_spawn_fib(n: usize) -> usize {
+        match n {
+            0 | 1 => n,
+            2..=SERIAL_CUTOFF => rayon_spawn_fib(n - 1) + rayon_spawn_fib(n - 2),
+            _ => {
+                let mut x: Option<usize> = None;
+                let y = rayon::scope(|s| {
+                    s.spawn(|_| x = Some(rayon_spawn_fib(n - 1)));
+                    rayon_spawn_fib(n - 2)
+                });
+                x.expect("closure should've completed!") + y
+            }
+        }
+    }
 }

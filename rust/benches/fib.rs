@@ -1,5 +1,5 @@
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, PlotConfiguration};
-use bench_lib::fib::{cilk_fib, cilk_scope_fib, rayon_fib};
+use bench_lib::fib::{cilk_fib, cilk_scope_fib, rayon_fib, rayon_spawn_fib};
 
 fn bench_fibs(c: &mut Criterion) {
     // Use a log scale because the asmyptomotic complexity is exponential.
@@ -15,6 +15,9 @@ fn bench_fibs(c: &mut Criterion) {
         });
         group.bench_with_input(BenchmarkId::new("Rayon", i), i, |b, i| {
             b.iter(|| rayon_fib(black_box(*i)));
+        });
+        group.bench_with_input(BenchmarkId::new("Rayon-Spawn", i), i, |b, i| {
+            b.iter(|| rayon_spawn_fib(black_box(*i)));
         });
     }
     group.finish();
