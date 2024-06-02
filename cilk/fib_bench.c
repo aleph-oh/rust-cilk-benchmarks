@@ -11,7 +11,7 @@ static int64_t time_ns(struct timespec t)
     return 1000 * 1000 * 1000 * t.tv_sec + t.tv_nsec;
 }
 
-typedef size_t (*fib_t)(int);
+typedef size_t (*fib_t)(size_t);
 
 static void bench(int const num_runs, fib_t fib)
 {

@@ -4,7 +4,7 @@
 
 int const SERIAL_CUTOFF = 10;
 
-size_t fib_scope(int n)
+size_t fib_scope(size_t n)
 {
     if (n <= 1)
     {
@@ -27,7 +27,7 @@ size_t fib_scope(int n)
     }
 }
 
-size_t fib_noscope(int n)
+size_t fib_noscope(size_t n)
 {
     if (n <= 1)
     {

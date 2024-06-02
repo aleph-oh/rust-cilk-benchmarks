@@ -15,7 +15,7 @@ static void usage(const char *const binary_name)
     printf("Usage: %s <n> <num_runs> <%s|%s>\n", binary_name, SCOPE, NOSCOPE);
 }
 
-static size_t run(int n, int num_runs, size_t (*fib)(int))
+static size_t run(int n, int num_runs, size_t (*fib)(size_t))
 {
     size_t total = 0;
     for (int i = 0; i < num_runs; i++)
