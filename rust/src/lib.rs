@@ -47,11 +47,12 @@ pub mod fib {
             2..=SERIAL_CUTOFF => rayon_spawn_fib(n - 1) + rayon_spawn_fib(n - 2),
             _ => {
                 let mut x: Option<usize> = None;
-                let y = rayon::scope(|s| {
+                let mut y: Option<usize> = None;
+                rayon::scope(|s| {
                     s.spawn(|_| x = Some(rayon_spawn_fib(n - 1)));
-                    rayon_spawn_fib(n - 2)
+                    s.spawn(|_| y = Some(rayon_spawn_fib(n - 2)));
                 });
-                x.expect("closure should've completed!") + y
+                x.zip(y).map(|(x, y)| x + y).expect("closure should've completed!")
             }
         }
     }
